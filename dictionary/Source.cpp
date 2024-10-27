@@ -14,130 +14,112 @@ int main()
 
     int choice;
 
-    do 
+    do
     {
+        cout << "\033[35m\tMenu: \033[0m" << endl;
+        cout << "1. Add a word with translation" << endl;
+        cout << "2. Delete a word" << endl;
+        cout << "3. Find a word" << endl;
+        cout << "4. Save dictionary to file" << endl;
+        cout << "5. Print dictionary to console" << endl;
+        cout << "0. Exit" << endl;
+        cout << "\033[90mYour choice: \033[0m";
 
-    cout << "\033[35m\tМеню: \033[0m" << endl;
-    cout << "1. Добавить слово с переводом " << endl;
-    cout << "2. Удалить слово" << endl;
-    cout << "3. Найти слово" << endl;
+        cin >> choice;
 
-    cout << "4. Сохранить словарь в файл" << endl;
-    cout << "5. Вывести словарь на консоль" << endl;
-    cout << "0. Выход" << endl;
-    cout << "\033[90mВаш выбор: \033[0m";
-
-    cin >> choice;
-
-    switch (choice)
-    {
-    case 1: 
-    {
-        system("cls");
-        string word;
-        string translation;
-        cout << "Введите слово на английском: ";
-        cin >> word;
-        cout << "Введите перевод: ";
-        cin >> translation;
-        dict.insert(make_pair(word, translation));
-        system("cls");
-        cout << "\033[32mСлово добавлено!\033[0m" << endl;
-        cout << endl;
-        break;
-    }
-    case 2:
-    {
-        system("cls");
-        string word;
-        cout << "Введите слово для удаления: ";
-        cin >> word;
-        auto forRemove = dict.find(word);
-        system("cls");
-        if (forRemove != dict.end())
+        switch (choice)
         {
-            dict.erase(forRemove);
-            cout << "\033[32mСлово удалено!\033[0m" << endl;
+        case 1:
+        {
+            system("cls");
+            string word;
+            string translation;
+            cout << "Enter a word in English: ";
+            cin >> word;
+            cout << "Enter the translation: ";
+            cin >> translation;
+            dict.insert(make_pair(word, translation));
+            system("cls");
+            cout << "\033[32mWord added!\033[0m" << endl;
+            cout << endl;
+            break;
         }
-        else 
+        case 2:
         {
-            cout << "\033[31mСлово не найдено!\033[0m" << endl;
+            system("cls");
+            string word;
+            cout << "Enter the word to delete: ";
+            cin >> word;
+            auto forRemove = dict.find(word);
+            system("cls");
+            if (forRemove != dict.end())
+            {
+                dict.erase(forRemove);
+                cout << "\033[32mWord deleted!\033[0m" << endl;
+            }
+            else
+            {
+                cout << "\033[31mWord not found!\033[0m" << endl;
+            }
+            cout << endl;
+            break;
         }
-        cout << endl;
-        break;
-    }
-    case 3:
-    {
-        system("cls");
-        string s;
-        cout << "Введите слово для поиска ";
-        cin >> s;
-        auto ptrf = dict.find(s);
-        system("cls");
-        if (ptrf != dict.end())
+        case 3:
         {
-            /*system("cls");
-            system("color 0B");*/
-            cout << "\033[32mНайдено:\033[0m " << ptrf->first << " - " << ptrf->second << endl;
+            system("cls");
+            string s;
+            cout << "Enter the word to search for: ";
+            cin >> s;
+            auto ptrf = dict.find(s);
+            system("cls");
+            if (ptrf != dict.end())
+            {
+                cout << "\033[32mFound:\033[0m " << ptrf->first << " - " << ptrf->second << endl;
+            }
+            else
+            {
+                cout << "\033[31mWord not found!\033[0m" << endl;
+            }
+            cout << endl;
+            break;
         }
-        else
+        case 4:
         {
-            /*system("cls");*/
-            //system("color help");
-            /* system("color 0C");*/
-            cout << "\033[31mСлово не найдено!\033[0m" << endl;
-
+            system("cls");
+            ofstream file("dictionary.txt");
+            if (file.is_open())
+            {
+                for (auto ptr = dict.begin(); ptr != dict.end(); ptr++)
+                {
+                    file << ptr->first << " - " << ptr->second << endl;
+                }
+                file.close();
+                cout << "\033[32mFile saved\n\033[0m";
+            }
+            else
+            {
+                cout << "\033[31mFailed to save file\033[0m\n";
+            }
+            cout << endl;
+            break;
         }
-        cout << endl;
-        break;
-    }
-    case 4:
-    {
-        system("cls");
-        ofstream file("dictionary.txt");
-        if (file.is_open())
-        {
+        case 5:
+            system("cls");
+            cout << "\033[35m\tDictionary: \033[0m" << endl;
             for (auto ptr = dict.begin(); ptr != dict.end(); ptr++)
             {
-                file << ptr->first << " - " << ptr->second << endl;
+                cout << ptr->first << " - " << ptr->second << endl;
             }
-            file.close();
-            cout << "\033[32mФайл сохранен\n\033[0m";
+            cout << endl;
+            break;
+        case 0:
+            system("cls");
+            cout << "\033[35mExiting the program.\033[0m";
+            break;
+        default:
+            system("cls");
+            cout << "\033[31mInvalid choice, try again!\033[0m" << endl;
+            break;
         }
-        else
-        {
-            cout << "\033[31mНеудалось сохранить файл\033[0m\n";
-        }
-        cout << endl;
-        break;
-    }
-    case 5:
-        system("cls");
-        cout << "\033[35m\tCловарь: \033[0m" << endl;
-        for (auto ptr = dict.begin(); ptr != dict.end(); ptr++)
-        {
-            cout << ptr->first << " - " << ptr->second << endl;
-        }
-        cout << endl;
-        break;
-    case 0:
-        system("cls");
-        cout << "\033[35mВыход из программы.\033[0m";
-        break;
-    default:
-        system("cls");
-        cout << "\033[31mНеверный выбор, попробуйте снова!\033[0m" << endl;
-        break;
-    }
-
-
-
-
-
-
-
-
-
-
-    }while (choice != 0);
+    } while (choice != 0);
 }
